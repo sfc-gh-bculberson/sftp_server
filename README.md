@@ -20,6 +20,6 @@ pushd sftp && ./build.sh && popd
 
 ## CREATE NETWORK RULES & SERVICE
 
-Run the rest of the setup.2.sql to create the service.
+Run the sql from setup.2.sql to create the service.
 
 The IP and Port of the sftp server will be available in the service logs as well as in the ngrok portal.

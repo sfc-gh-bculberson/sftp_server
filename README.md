@@ -4,9 +4,7 @@ This project is a demo to show how Snowflake Container Services with ngrok could
 
 ## INSTRUCTIONS
 
-Run the sql from setup.sql in the Snowflake Account, up to and including the SHOW IMAGE REPOSITORIES. 
-
-The rest will be ran after containers are built and pushed.
+Run the sql from setup.1.sql in the Snowflake Account. 
 
 ## BUILD & PUSH
 
@@ -22,4 +20,4 @@ pushd sftp && ./build.sh && popd
 
 ## CREATE NETWORK RULES & SERVICE
 
-Run the rest of the setup.sql to create the service
+Run the rest of the setup.2.sql to create the service

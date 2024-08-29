@@ -1,15 +1,23 @@
 USE ROLE ACCOUNTADMIN;
 
-CREATE ROLE sftp_role;
-
+CREATE ROLE IF NOT EXISTS sftp_role;
 CREATE DATABASE IF NOT EXISTS sftp_db;
+CREATE SCHEMA IF NOT EXISTS sftp_schema;
+CREATE OR REPLACE NETWORK RULE ngrok_egress_access
+  MODE = EGRESS
+  TYPE = HOST_PORT
+  VALUE_LIST = ('connect.ngrok-agent.com:443', 'crl.ngrok-agent.com:80');
+
+CREATE OR REPLACE EXTERNAL ACCESS INTEGRATION ngrok_egress_access_integration
+  ALLOWED_NETWORK_RULES = (ngrok_egress_access)
+  ENABLED = true;
 GRANT OWNERSHIP ON DATABASE sftp_db TO ROLE sftp_role COPY CURRENT GRANTS;
+GRANT OWNERSHIP ON SCHEMA sftp_db.sftp_schema TO ROLE sftp_role COPY CURRENT GRANTS;
+GRANT USAGE ON INTEGRATION ngrok_egress_access_integration TO ROLE sftp_role;
 
 CREATE OR REPLACE WAREHOUSE sftp_warehouse WITH
   WAREHOUSE_SIZE='X-SMALL';
 GRANT USAGE ON WAREHOUSE sftp_warehouse TO ROLE sftp_role;
-
-GRANT BIND SERVICE ENDPOINT ON ACCOUNT TO ROLE sftp_role;
 
 CREATE COMPUTE POOL sftp_compute_pool
   MIN_NODES = 1
@@ -17,13 +25,12 @@ CREATE COMPUTE POOL sftp_compute_pool
   INSTANCE_FAMILY = CPU_X64_XS;
 GRANT USAGE, MONITOR ON COMPUTE POOL sftp_compute_pool TO ROLE sftp_role;
 
-GRANT ROLE sftp_role TO USER BCULBERSON;
-
+GRANT ROLE SFTP_ROLE TO ROLE ACCOUNTADMIN;
 USE ROLE sftp_role;
 USE DATABASE sftp_db;
+USE SCHEMA sftp_schema;
 USE WAREHOUSE sftp_warehouse;
 
-CREATE SCHEMA sftp_schema;
 CREATE IMAGE REPOSITORY IF NOT EXISTS sftp_repository;
 CREATE OR REPLACE STAGE sftp_stage ENCRYPTION = (type = 'SNOWFLAKE_SSE');
 

@@ -9,3 +9,6 @@ tunnels:
   sftp:
     proto: tcp
     addr: localhost:22
+    # IP restriction is a paid feature
+    # ip_restriction:
+    #   allow_cidrs: [IP_ADDRESS/32]

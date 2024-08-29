@@ -12,6 +12,7 @@ Set environment variables for NGROK_AUTHTOKEN and REPOSITORY_URL before building
 
 
 ```bash
+snow spcs image-registry login
 export NGROK_AUTHTOKEN=<REDACTED>
 export REPOSITORY_URL=<REDACTED>
 pushd ngrok && ./build.sh && popd
